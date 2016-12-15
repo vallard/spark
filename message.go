@@ -11,15 +11,15 @@ import (
 const MessagesUrl = "https://api.ciscospark.com/v1/messages"
 
 type Message struct {
-	Id          string    `json:"id"`
-	RoomId      string    `json:"roomId"`
-	RoomType    string    `json:"roomType"`
-	Text        string    `json:"text"`
-	PersonId    string    `json:"personId"`
-	PersonEmail string    `json:"personEmail"`
-	Markdown    string    `json:"markdown"`
-	Html        string    `json:"html"`
-	created     time.Time `json:"created"`
+	Id          string    `json:"id,omitempty"`
+	RoomId      string    `json:"roomId,omitempty"`
+	RoomType    string    `json:"roomType,omitempty"`
+	Text        string    `json:"text,omitempty"`
+	PersonId    string    `json:"personId,omitempty"`
+	PersonEmail string    `json:"personEmail,omitempty"`
+	Markdown    string    `json:"markdown,omitempty"`
+	Html        string    `json:"html,omitempty"`
+	created     time.Time `json:"created,omitempty"`
 }
 
 type Messages struct {
