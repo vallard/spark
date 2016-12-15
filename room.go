@@ -43,7 +43,7 @@ func (s *Spark) ListRooms(uv *url.Values) ([]SparkRoom, error) {
 	return rooms.Items, nil
 }
 
-// get one room
+// get one room with Id
 func (s *Spark) GetRoom(roomId string) (SparkRoom, error) {
 	var room SparkRoom
 	if roomId == "" {
@@ -55,4 +55,21 @@ func (s *Spark) GetRoom(roomId string) (SparkRoom, error) {
 	}
 	err = json.Unmarshal(bytes, &room)
 	return room, err
+}
+
+// only returns the first room with this name
+func (s *Spark) GetRoomWithName(roomName string) (SparkRoom, error) {
+	var room SparkRoom
+	allRooms, err := s.ListRooms(nil)
+	if err != nil {
+		return room, err
+	}
+
+	for _, r := range allRooms {
+		if r.Title == roomName {
+			return r, nil
+		}
+	}
+	errMessage := fmt.Sprintf("No room with Name: %s was found\n")
+	return room, errors.New(errMessage)
 }

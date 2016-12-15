@@ -2,6 +2,7 @@ package spark
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -9,8 +10,7 @@ import (
 )
 
 const (
-	MessagesUrl = "https://api.ciscospark.com/v1/messages"
-	PeopleUrl   = "https://api.ciscospark.com/v1/people"
+	PeopleUrl = "https://api.ciscospark.com/v1/people"
 )
 
 var httpClient *http.Client
@@ -25,11 +25,20 @@ func (s *Spark) request(req *http.Request) ([]byte, error) {
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 
 	res, err := httpClient.Do(req)
+
 	if err != nil {
 		return nil, err
 	}
+
 	defer res.Body.Close()
-	return ioutil.ReadAll(res.Body)
+	bs, err := ioutil.ReadAll(res.Body)
+
+	if res.StatusCode != http.StatusOK {
+		e := fmt.Sprintf("HTTP Status Code: %d\n%s", res.StatusCode, string(bs))
+		return nil, errors.New(e)
+	}
+
+	return bs, err
 }
 
 func (s *Spark) GetRequest(url string, uv *url.Values) ([]byte, error) {
@@ -37,20 +46,17 @@ func (s *Spark) GetRequest(url string, uv *url.Values) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	if uv != nil {
 		req.URL.RawQuery = (*uv).Encode()
 	}
 	return s.request(req)
 }
 
-func (s *Spark) PostRequest(url string, uv *url.Values, body *bytes.Buffer) ([]byte, error) {
+func (s *Spark) PostRequest(url string, body *bytes.Buffer) ([]byte, error) {
 	req, err := http.NewRequest("POST", url, body)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	if err != nil {
 		return nil, err
-	}
-	if uv != nil {
-		req.URL.RawQuery = (*uv).Encode()
 	}
 	return s.request(req)
 }
