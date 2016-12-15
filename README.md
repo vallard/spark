@@ -3,9 +3,18 @@ Golang client for Cisco Spark API
 
 ## Supported API calls
 
+### Rooms
 Method | Description | Example
 --- | --- | --- 
 ListRooms | Lists Rooms Available | 
+GetRoom | Gets a Room with a Room ID |
+GetRoomWithName | Gets the first Room where Name matches|
+
+### Messages
+Method | Description | Example
+--- | --- | --- 
+ListMessages | Lists all messages in a Room |
+CreateMessage | Creates a message to a Room |
 
 ## Example
 
@@ -23,13 +32,31 @@ const (
 
 func main() {
   s := spark.New(token)
-  err := s.PostMessage(roomName, "Hello, world!")
+  
+  // Get the room ID of the room name
+  room, err := s.GetRoomWithName(roomName)
+  
+  if err != nil {
+  	panic(err)
+  }
+  
+  // Create the message we want to send
+  m := spark.Message{
+  	RoomId: room.Id
+  	Markdown: "# Big Message right here!"
+  }
+  
+  // Post the message to the room
+  _, err := s.CreateMessage(m)
+  
   if err != nil {
     panic(err)
   }
 }
 ```
 
+Read the test cases for more ways to use the library.
+
 ## Inspiration
 
-The Slack [bluele/slack](https://github.com/bleule/slack)
+[bluele/slack](https://github.com/bleule/slack) 
