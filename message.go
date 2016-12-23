@@ -53,7 +53,7 @@ func (s *Spark) ListMessages(uv *url.Values) ([]Message, error) {
 func (s *Spark) CreateMessage(m Message) (Message, error) {
 	var rm Message
 	if m.RoomId == "" {
-		return rm, errors.New("Please include a roomId")
+		return rm, errors.New("A Valid RoomId was not included to Create the Message")
 	}
 
 	if m.RoomType == "" {
