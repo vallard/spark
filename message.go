@@ -19,7 +19,7 @@ type Message struct {
 	PersonEmail string    `json:"personEmail,omitempty"`
 	Markdown    string    `json:"markdown,omitempty"`
 	Html        string    `json:"html,omitempty"`
-	created     time.Time `json:"created,omitempty"`
+	Created     time.Time `json:"created,omitempty"`
 }
 
 type Messages struct {
