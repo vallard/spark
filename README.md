@@ -15,6 +15,7 @@ Method | Description | Example
 --- | --- | --- 
 ListMessages | Lists all messages in a Room |
 CreateMessage | Creates a message to a Room |
+GetMessage | Gets a message by Id |
 
 ## Example
 
