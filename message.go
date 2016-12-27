@@ -11,15 +11,16 @@ import (
 const MessagesUrl = "https://api.ciscospark.com/v1/messages"
 
 type Message struct {
-	Id          string    `json:"id,omitempty"`
-	RoomId      string    `json:"roomId,omitempty"`
-	RoomType    string    `json:"roomType,omitempty"`
-	Text        string    `json:"text,omitempty"`
-	PersonId    string    `json:"personId,omitempty"`
-	PersonEmail string    `json:"personEmail,omitempty"`
-	Markdown    string    `json:"markdown,omitempty"`
-	Html        string    `json:"html,omitempty"`
-	Created     time.Time `json:"created,omitempty"`
+	Id          string `json:"id,omitempty"`
+	RoomId      string `json:"roomId,omitempty"`
+	RoomType    string `json:"roomType,omitempty"`
+	Text        string `json:"text,omitempty"`
+	PersonId    string `json:"personId,omitempty"`
+	PersonEmail string `json:"personEmail,omitempty"`
+	Markdown    string `json:"markdown,omitempty"`
+	Html        string `json:"html,omitempty"`
+	//Created     time.Time `json:"created,omitempty"`
+	Created time.Time `json:"-"`
 }
 
 type Messages struct {
@@ -50,6 +51,21 @@ func (s *Spark) ListMessages(uv *url.Values) ([]Message, error) {
 	return m.Items, err
 }
 
+// Get a message by the message ID
+func (s *Spark) GetMessage(messageId string) (Message, error) {
+	var m Message
+	if messageId == "" {
+		return m, errors.New("Please include message ID")
+	}
+	u := MessagesUrl + "/" + messageId
+	bytes, err := s.GetRequest(u, &url.Values{})
+	if err != nil {
+		return m, err
+	}
+	err = json.Unmarshal(bytes, &m)
+	return m, err
+}
+
 func (s *Spark) CreateMessage(m Message) (Message, error) {
 	var rm Message
 	if m.RoomId == "" {
@@ -59,7 +75,6 @@ func (s *Spark) CreateMessage(m Message) (Message, error) {
 	if m.RoomType == "" {
 		m.RoomType = "group"
 	}
-
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(m)
 	bytes, err := s.PostRequest(MessagesUrl, b)

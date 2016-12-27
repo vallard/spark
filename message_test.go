@@ -1,10 +1,11 @@
 package spark
 
 import (
-	"fmt"
 	"net/url"
 	"testing"
 )
+
+var allMessages []Message
 
 func TestBadMessageRequest(t *testing.T) {
 	s = getSpark(t)
@@ -23,14 +24,21 @@ func TestListMessages(t *testing.T) {
 
 	uv := url.Values{}
 	uv.Add("roomId", allRooms[0].Id)
-	m, err := s.ListMessages(&uv)
+	allMessages, err := s.ListMessages(&uv)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	if len(m) < 1 {
+	if len(allMessages) < 1 {
 		t.Error("Expected there to be at least one message in the room")
+	}
+
+	// test Get messages
+	firstMessage := allMessages[0]
+	_, err = s.GetMessage(firstMessage.Id)
+	if err != nil {
+		t.Error(err)
 	}
 }
 
@@ -52,5 +60,4 @@ func TestCreateMessage(t *testing.T) {
 	if m.Text != rm.Text {
 		t.Errorf("titles of return message %s should be the same as original: %s", m.Text, rm.Text)
 	}
-	fmt.Println(rm)
 }
