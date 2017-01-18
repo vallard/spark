@@ -17,6 +17,12 @@ ListMessages | Lists all messages in a Room |
 CreateMessage | Creates a message to a Room |
 GetMessage | Gets a message by Id |
 
+### Webhooks
+Method | Description | Example
+--- | --- | --- 
+CreateWebhook | Creates a new webhook |
+ListWebhooks | 
+
 ## Example
 
 ```go
