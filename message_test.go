@@ -31,7 +31,8 @@ func TestListMessages(t *testing.T) {
 	}
 
 	if len(allMessages) < 1 {
-		t.Error("Expected there to be at least one message in the room")
+		t.Fatal("Expected there to be at least one message in the room")
+
 	}
 
 	// test Get messages
@@ -48,10 +49,10 @@ func TestCreateMessage(t *testing.T) {
 		getAllRooms(t)
 	}
 
-	room := allRooms[0]
+	room := allRooms[1]
 	m := Message{
 		RoomId: room.Id,
-		Text:   "sorry, just a quick test",
+		Text:   "I'll test as much as I want. I'm Rick James.  Get up!",
 	}
 	rm, err := s.CreateMessage(m)
 	if err != nil {

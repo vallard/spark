@@ -33,9 +33,13 @@ func (s *Spark) request(req *http.Request) ([]byte, error) {
 	defer res.Body.Close()
 	bs, err := ioutil.ReadAll(res.Body)
 
+	// return code should be 200
 	if res.StatusCode != http.StatusOK {
-		e := fmt.Sprintf("HTTP Status Code: %d\n%s", res.StatusCode, string(bs))
-		return nil, errors.New(e)
+		// spark delete is exit code 204 "No Content"
+		if res.StatusCode != 204 {
+			e := fmt.Sprintf("HTTP Status Code: %d\n%s", res.StatusCode, string(bs))
+			return nil, errors.New(e)
+		}
 	}
 
 	return bs, err
@@ -55,6 +59,15 @@ func (s *Spark) GetRequest(url string, uv *url.Values) ([]byte, error) {
 
 func (s *Spark) PostRequest(url string, body *bytes.Buffer) ([]byte, error) {
 	req, err := http.NewRequest("POST", url, body)
+	if err != nil {
+		return nil, err
+	}
+	return s.request(req)
+}
+
+func (s *Spark) DeleteRequest(url string) ([]byte, error) {
+	fmt.Println("Delete url: ", url)
+	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		return nil, err
 	}

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	"log"
 	"net/url"
 	"time"
 )
@@ -59,7 +58,6 @@ func (s *Spark) GetMessage(messageId string) (Message, error) {
 		return m, errors.New("Please include message ID")
 	}
 	u := MessagesUrl + "/" + messageId
-	log.Println(u)
 	bytes, err := s.GetRequest(u, &url.Values{})
 	if err != nil {
 		return m, err
