@@ -4,24 +4,25 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 )
 
 const PeopleUrl = "https://api.ciscospark.com/v1/people"
 
 type Person struct {
-	Id           string   `json:"id"`
-	Emails       []string `json:"emails"`
-	DisplayName  string   `json:"displayName"`
-	FirstName    string   `json:"firstName"`
-	LastName     string   `json:"lastName"`
-	Avatar       string   `json:"avatar"`
-	OrgId        string   `json:"orgId"`
-	Roles        []string `json:"roles"`
-	Licenses     []string `json:"licenses"`
-	Created      []string `json:"created"`
-	Timezone     string   `json:"timezone"`
-	LastActivity string   `json:"lastActivity"`
-	Status       string   `json:"status"`
+	Id           string    `json:"id"`
+	Emails       []string  `json:"emails"`
+	DisplayName  string    `json:"displayName"`
+	FirstName    string    `json:"firstName"`
+	LastName     string    `json:"lastName"`
+	Avatar       string    `json:"avatar"`
+	OrgId        string    `json:"orgId"`
+	Roles        []string  `json:"roles"`
+	Licenses     []string  `json:"licenses"`
+	Created      time.Time `json:"created"`
+	Timezone     string    `json:"timezone"`
+	LastActivity time.Time `json:"lastActivity"`
+	Status       string    `json:"status"`
 }
 
 // https://developer.ciscospark.com/resource-webhooks.html
@@ -49,7 +50,6 @@ func (s *Spark) GetMyself() (Person, error) {
 	if err != nil {
 		return me, err
 	}
-	fmt.Println(string(bytes))
 	err = json.Unmarshal(bytes, &me)
 	return me, err
 }
