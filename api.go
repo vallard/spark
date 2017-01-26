@@ -9,10 +9,6 @@ import (
 	"net/url"
 )
 
-const (
-	PeopleUrl = "https://api.ciscospark.com/v1/people"
-)
-
 var httpClient *http.Client
 
 func init() {
