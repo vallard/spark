@@ -21,8 +21,8 @@ GetMessage | Gets a message by Id |
 Method | Description | Example
 --- | --- | --- 
 CreateWebhook | Creates a new webhook |
-ListWebhooks | 
-
+ListWebhooks | Lists existing webhooks |
+DeleteWebhook | Deletes a webhook given a webhook ID | 
 ## Example
 
 ```go
