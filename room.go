@@ -70,6 +70,6 @@ func (s *Spark) GetRoomWithName(roomName string) (SparkRoom, error) {
 			return r, nil
 		}
 	}
-	errMessage := fmt.Sprintf("No room with Name: %s was found\n")
+	errMessage := fmt.Sprintf("No room with Name: %s was found\n", roomName)
 	return room, errors.New(errMessage)
 }
